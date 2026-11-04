@@ -158,6 +158,34 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileNavBackdrop.addEventListener('click', closeMobileNav);
   }
 
+  const drawerCloseBtns = document.querySelectorAll('.mobile-drawer-close');
+  drawerCloseBtns.forEach(btn => {
+    btn.addEventListener('click', closeMobileNav);
+  });
+
+  // Mobile Touch Swipe-to-Close Drawer
+  if (mobileNavDrawer) {
+    let drawerStartX = 0;
+    let drawerCurrentX = 0;
+
+    mobileNavDrawer.addEventListener('touchstart', (e) => {
+      drawerStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    mobileNavDrawer.addEventListener('touchmove', (e) => {
+      drawerCurrentX = e.touches[0].clientX;
+    }, { passive: true });
+
+    mobileNavDrawer.addEventListener('touchend', () => {
+      // Swiping to the right (towards screen edge) closes drawer
+      if (drawerCurrentX - drawerStartX > 60 && drawerCurrentX > 0) {
+        closeMobileNav();
+      }
+      drawerStartX = 0;
+      drawerCurrentX = 0;
+    });
+  }
+
   mobileMenuLinks.forEach(link => {
     link.addEventListener('click', closeMobileNav);
   });
